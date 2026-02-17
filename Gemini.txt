@@ -1,0 +1,542 @@
+Esta es una excelente parada técnica. Antes de lanzarte a construir un motor de lógica, hay que evaluar el retorno de inversión (ROI). Vamos punto por punto:
+1. ¿Sirve para la máxima puntuación?
+
+Sí, pero con un matiz. La máquina de estados es la arquitectura, no el algoritmo.
+
+    Si tus "estados" son mediocres (ej. un estado que solo hace ra hasta encontrar el mínimo), no sacarás los puntos.
+
+    Si tus estados implementan la lógica de "ventana de 6" que mencionaste, serás extremadamente eficiente. Lo bueno de la FSM (Finite State Machine) 
+es que te permite manejar casos complejos (como el de los 500 números) dividiendo el problema en fases muy optimizadas sin que el código se vuelva un nido de if ilegible.
+
+2. ¿Se usa en el mundo profesional?
+
+Rotundamente, sí. Es uno de los patrones más fundamentales en ingeniería:
+
+    Sistemas Embebidos: El software de un microondas, un ascensor o el ABS de un coche son máquinas de estados puras.
+
+    Videojuegos: La IA de los enemigos (Estado: Patrullar -> Alerta -> Perseguir -> Atacar).
+
+    Protocolos de Red: El protocolo TCP (el que permite que estemos hablando ahora) funciona mediante estados (LISTEN, ESTABLISHED, CLOSE_WAIT).
+
+    Compiladores: Los analizadores léxicos (lexers) usan FSMs para entender el código fuente.
+
+    Aprender esto te da un "superpoder" para entrevistas técnicas: saber estructurar lógica compleja de forma robusta.
+
+3. ¿Cuánto crecería el proyecto? (Tiempo y Complejidad)
+
+Aquí está la balanza:
+
+    Boilerplate (Código base): Crecerá un poco. Necesitarás un enum para los estados y probablemente un switch principal o un array de punteros a funciones.
+
+    Claridad: El proyecto se vuelve más pequeño mentalmente. En lugar de un archivo de 500 líneas con lógica mezclada, tendrás funciones pequeñas: state_pushing(), 
+state_sorting_three(), state_realigning().
+
+    Tiempo: Si ya tienes claro cómo quieres que se muevan los números, implementar la FSM te llevará una tarde extra. Sin embargo, te ahorrará días de debug, 
+porque los errores en una FSM son mucho más fáciles de localizar que en un código espagueti.
+
+4. ¿Dónde aprender más?
+
+Para el nivel que necesitas en push_swap, no hace falta que te leas un libro de teoría de la computación. Busca estos conceptos:
+
+    "Finite State Machine in C": Busca ejemplos simples de cómo usar un switch(state) dentro de un while(1).
+
+    "State Pattern" (Patrón de Estado): Es la versión orientada a objetos, pero la lógica de transición es la misma.
+
+    Visualización: Dibuja círculos (estados) y flechas (transiciones) en un papel. Si puedes dibujarlo, puedes programarlo.
+
+Comparativa: ¿Vale la pena para ti?
+Factor	Algoritmo "Clásico" (Scripts de Ifs)	Máquina de Estados (FSM)
+Dificultad Inicial	Baja (empiezas a picar ya)	Media (tienes que diseñar el diagrama)
+Mantenimiento	Pesadilla (si tocas algo, todo rompe)	Fácil (añades o quitas estados)
+Escalabilidad	Difícil llegar a 500 números	Alta (ideal para el test de 500)
+Valor para el CV	Bajo	Alto
+
+Mi opinión sincera: Si vas justo de tiempo (te quedan 2 o 3 días), haz una versión simple de Chunks. Pero si tienes una semana o más, 
+invierte un día en diseñar una máquina de estados sencilla. Te hará sentir que estás programando de verdad y no solo "parcheando" un algoritmo de internet.
+
+¿Te gustaría que te escribiera un esqueleto mínimo en C de cómo se vería la estructura de una máquina de estados para push_swap? 
+Sería una base sólida sobre la que podrías empezar a trabajar.
+
+
+
+
+
+
+¡Diste en el clavo! Sí, en C puedes tener punteros a funciones. Es uno de los conceptos más potentes del lenguaje y es la base de cómo se implementan cosas 
+como el polimorfismo en C o los sistemas operativos.
+
+Para que no te líes: la Máquina de Estados es el "Director de Orquesta" (la estructura que organiza cuándo hacer qué), pero necesitas una Partitura (el Algoritmo) 
+que le diga qué notas tocar.
+1. Punteros a funciones (El "Array de comandos")
+
+En C, una función no es más que una dirección de memoria donde empieza el código. Puedes guardarla en una variable.
+
+La sintaxis (que da un poco de miedo al principio):
+C
+
+// Definición de un puntero a una función que no devuelve nada y recibe dos stacks
+void (*mi_funcion)(t_stack **a, t_stack **b);
+
+// Un array de punteros a funciones (uno para cada estado)
+void (*estado_actual[3])(t_stack **a, t_stack **b);
+
+Esto te permite hacer algo tan limpio como esto en tu main:
+while (estado != FIN) { estados[estado](&stack_a, &stack_b); }
+Sin un solo if gigante.
+2. El Algoritmo: "¿Qué lógica uso dentro de los estados?"
+
+Si quieres algo "real", elegante y que aproveche tu ventana de 6 números, mi recomendación es un Insertion Sort Circular Optimizado.
+
+¿En qué consiste?
+En lugar de buscar el "más barato" de todo el stack (fuerza bruta), trabajas con la lógica de posicionamiento relativo.
+Fase A (De A a B): "El Filtro Inteligente"
+
+    Estado "Analizar": Miras tus 6 números (3 arriba de A, 3 arriba de B).
+
+    Lógica: Si el tope de A es "cercano" al tope de B (ej. su índice es N y en B tienes N−1 o N+1), haces el push inmediato.
+
+    Estado "Rotar": Si no hay coincidencia en la ventana de 6, mueves A hacia el siguiente número que sí encaje en el "flujo" que estás creando en B.
+
+        Aquí usas tu inteligencia: Si ves que el número que necesitas está en stack_a->prev (el fondo), usas rra.
+
+Fase B (De B a A): "La Reconstrucción"
+
+Una vez que B tiene los números, vuelves a A. Pero como usaste la "ventana de 6" para que B quedara "medio ordenado" por rachas, devolverlos es casi instantáneo.
+3. ¿Cómo encaja esto en la Máquina de Estados?
+
+Podrías definir 3 estados principales para que el proyecto no crezca al infinito:
+
+    ESTADO_PUSH (Elegante):
+
+        Usa la ventana de 6. Si a->top encaja perfectamente entre b->top y b->next, haces pb y luego sb. Has colocado dos números con 2 movimientos.
+
+    ESTADO_SEARCH (Eficiente):
+
+        Si nada encaja en la ventana, decides hacia dónde rotar A. Pero no rotas a ciegas; rotas buscando el número que "rompa" menos la armonía de B.
+
+    ESTADO_SWAP (Oportunista):
+
+        Si ves que a->top y a->next están al revés respecto a su orden ideal, ejecutas sa antes de cualquier otra cosa.
+
+¿Por qué esto es mejor que el Turk?
+
+El Turk es: "Calculo 500 combinaciones, elijo la menor". (Fuerza bruta).
+Tu FSM con Ventana de 6 es: "Veo el contexto, tomo una decisión lógica basada en reglas". (Sistemas Expertos).
+Mi recomendación para no morir en el intento:
+
+No hagas una máquina de 10 estados. Haz una de 3 o 4 estados máximo.
+
+    Pre-procesamiento (Indexar números).
+
+    Pushing (Mover de A a B usando tu ventana de 6).
+
+    Returning (Mover de B a A buscando el hueco).
+
+¿Te gustaría que te pasara un pequeño snippet de código de cómo se declara ese array de punteros a funciones para que veas que no es tan fiero el león como lo pintan? 
+Sería el primer paso para estructurar tu proyecto.
+
+¡Exacto! Lo has visualizado perfectamente. En lugar de ver el stack como una montaña de datos estática, lo ves como una rueda (gracias a que es circular) que vas girando
+ para que los números "pasen" por tu estación de inspección (tu ventana de 6).
+
+La lógica sería algo así:
+
+    Inspeccionas los 6 números que tienes "a mano" (los punteros top, next y prev de ambos stacks).
+
+    Decides la mejor acción inmediata basándote en esos 6 valores.
+
+    Ejecutas el movimiento (pa, pb, sa, ra, etc.).
+
+    Giras la rueda (si la acción no fue un push o swap, habrás rotado) y el ciclo vuelve a empezar.
+
+Aquí tienes el esqueleto técnico de cómo implementar esto con los famosos punteros a funciones y la máquina de estados, para que veas que el código queda súper limpio.
+El Esqueleto de tu Máquina de Estados
+
+Primero definimos los estados en un enum y el tipo de función que manejará cada estado:
+C
+
+typedef enum e_state {
+    SEARCHING,  // Estado: Buscando qué número mover
+    PUSHING,    // Estado: Preparando el stack B y moviendo
+    SORTING_3,  // Estado: Caso especial para los últimos 3
+    FINISHED    // Estado: ¡Proyecto terminado!
+} t_state;
+
+// Definimos un "mote" para el puntero a función para que sea legible
+typedef t_state (*t_state_func)(t_stack **a, t_stack **b);
+
+El Array de Punteros a Funciones
+
+Ahora creamos las funciones para cada estado y las metemos en un array. La clave es que cada función devuelve el siguiente estado:
+C
+
+t_state state_searching(t_stack **a, t_stack **b) {
+    // Aquí aplicas tu lógica de los 6 números
+    // Si encuentras el número ideal, devuelves PUSHING
+    // Si el stack A está casi vacío, devuelves SORTING_3
+    return (PUSHING); 
+}
+
+t_state state_pushing(t_stack **a, t_stack **b) {
+    // Aquí mueves el sitio en B y haces pb
+    return (SEARCHING);
+}
+
+// ... así con todos los estados
+
+El Bucle Principal (Tu main)
+
+Tu función de ordenación se convierte en algo tan elegante como esto:
+C
+
+void push_swap(t_stack **a, t_stack **b)
+{
+    t_state current_state;
+    // Array de funciones que coinciden con el orden del enum e_state
+    static const t_state_func do_state[] = {
+        state_searching,
+        state_pushing,
+        state_sorting_3,
+        NULL // FINISHED
+    };
+
+    current_state = SEARCHING;
+    while (current_state != FINISHED)
+    {
+        // Llamamos a la función del estado actual y ella nos dice cuál es el siguiente
+        current_state = do_state[current_state](a, b);
+    }
+}
+
+¿Por qué esto es mejor que mil if?
+
+    Aislamiento: Si el algoritmo falla cuando está moviendo números, solo tienes que mirar state_pushing. No te pierdes en un mar de código.
+
+    Flexibilidad: Si decides que tu "ventana de 6" necesita una regla nueva, la añades solo en la función de búsqueda.
+
+    Rendimiento: Al usar un array de punteros (una tabla de salto), el procesador no tiene que evaluar 50 condiciones if-else seguidas; va directo a la función que toca.
+
+Tu siguiente paso: La lógica de la "Ventana"
+
+Lo más difícil ahora es definir las reglas de prioridad dentro de state_searching. Por ejemplo:
+
+    Prioridad 1: Si a->top y a->next están desordenados pero el resto no, sa.
+
+    Prioridad 2: Si a->top encaja justo encima o debajo de b->top.
+
+    Prioridad 3: Si a->prev (el de abajo) es el que mejor encaja en B, pues rra.
+
+¿Te gustaría que te ayudara a definir un pequeño "set de reglas" de prioridad para esa ventana de 6 números antes de que te pongas a picar el código de las listas?
+
+
+Esta es la pregunta del millón. Para que tu Máquina de Estados con la ventana de 6 sea competitiva frente a los 5500 movimientos del test de 500 números, la clave no es solo 
+la arquitectura, sino la estrategia de particionamiento que ejecute esa máquina.
+
+Si intentas mover los 500 números de uno en uno buscando el "mejor" en cada momento sin una estructura previa, podrías irte a los 7.000 u 8.000 movimientos (suspenso).
+
+Aquí tienes el cálculo de lo que necesitas para sacar la máxima puntuación:
+1. El presupuesto de movimientos
+
+Para sacar un 100/100, necesitas estar por debajo de 5500.
+
+    Media ideal: ~11 movimientos por cada número (500×11=5500).
+
+    Realidad: Algunos números te costarán 2 movimientos y otros 20.
+
+2. Estimación según la lógica de tu máquina
+
+Si implementas la máquina de estados con una estrategia de Chunks (Bloques) integrada, los números salen así:
+
+    Fase de A -> B (Con ventana de 6 y Chunks):
+
+        Si divides los 500 números en, digamos, 11 bloques de unos 45 números cada uno.
+
+        Tu máquina de estados en modo SEARCHING solo busca números de ese bloque. Gracias a que ves el top, next y prev, siempre elegirás el camino más corto.
+
+        Coste estimado: ~2500 - 3000 movimientos.
+
+    Fase de B -> A (Reconstrucción):
+
+        Aquí es donde tu ventana de 6 brilla. Al devolver los números a A, como ya están agrupados por cercanía, el "hueco" en A siempre estará cerca.
+
+        Coste estimado: ~1500 - 2000 movimientos.
+
+Total estimado con tu lógica: 4000 - 5000 movimientos.
+(Estarías sobradamente dentro del 5/5, ya que el límite es 5500).
+3. ¿Por qué tu máquina de estados puede ser más eficiente que un script normal?
+
+La máquina de estados te permite implementar una "Optimización de Proximidad" que un script lineal no suele tener:
+
+    El "Double Push": Si tu ventana ve que a->top y a->next pertenecen al bloque actual, tu estado PUSHING puede decidir bajarlos ambos y luego usar ss (double swap) 
+o sb para acomodarlos. Ahorras 1 movimiento cada vez que esto ocurre.
+
+    Evitar el "Efecto Yoyo": Muchos algoritmos mueven un número y luego se dan cuenta de que el siguiente estaba mejor en la otra punta. Tu estado SEARCHING al mirar el prev 
+(el fondo del stack), detecta si es más barato hacer un rra (un paso) que tres ra (tres pasos).
+
+4. El punto crítico: El número de bloques
+
+Para 500 números, el "dulce punto" (sweet spot) para que tu máquina no trabaje de más es usar entre 11 y 15 bloques.
+
+    Si usas pocos bloques (ej. 4): La máquina tendrá que rotar demasiado el stack para encontrar el siguiente número del bloque. (Muchos movimientos).
+
+    Si usas muchos bloques (ej. 30): Perderás la ventaja de la "ventana de 6" porque habrá poca variedad de números donde elegir en cada paso.
+
+Resumen profesional
+
+Si programas bien las transiciones de tu máquina:
+
+    100 números: ~600-650 movimientos (Límite 700).
+
+    500 números: ~4300-4800 movimientos (Límite 5500).
+
+Veredicto: Es una estrategia muy segura para el éxito. Te da un margen de casi 1000 movimientos de error sobre el límite de la escuela, lo cual es oro puro para evitar fallos 
+por números aleatorios "complicados".
+
+¿Te sientes listo para definir el primer estado (la indexación y división por bloques) o quieres que veamos cómo estructurar la lógica de "decisión" de la ventana de 6 para 
+el estado SEARCHING?
+
+¡Ahora te entiendo perfectamente! Estás planteando crear secuencias ordenadas (runs) de forma oportunista. Lo que estás describiendo es la base de un algoritmo llamado TimSort 
+(el que usan Python o Java), 
+que busca "rachas" ya ordenadas para ahorrar trabajo.
+
+El problema es que, en push_swap, tener [1, 5, 8, 26, 32, 78] encima de [18, 25, 42, 46, 67, 98] es un reto, porque para "mezclarlos" e insertar el 18 entre el 8 y el 26, 
+tendrías que desmontar el primer bloque.
+
+Sin embargo, sí hay una salida brillante para tu idea, y se llama Mezcla Multicanal (Multi-way Merge) simplificada para stacks:
+La Estrategia de los "Bloques Puente"
+
+Si logras tener el stack B lleno de esos bloques de 6 ordenados, puedes aplicar esta lógica en la segunda fase (de B a A):
+
+    El "Imán" de A: El stack A ahora está vacío. Tu objetivo es traer el número más grande de B (digamos el 100).
+
+    Aprovechar la racha: Cuando encuentres ese 100 en B y lo pases a A, no busques el 99 a ciegas. Mira tu ventana de 6 en B.
+
+    Detección de adyacentes: Si en el bloque de 6 que acaba de quedar arriba en B hay números que "casi" van después del que acabas de mover (por ejemplo, el 98 y el 97), 
+los mueves a A aunque no sea el 99 todavía.
+
+    Reajuste con sa: Una vez en A, usas el sa para colocarlos en su sitio exacto.
+
+¿Por qué esto es mejor que el algoritmo de Chunks normal?
+
+En el algoritmo de chunks normal, B es un caos total. En tu propuesta:
+
+    Ahorras rotaciones: Como los números están "en fila" dentro de sus bloques de 6, cuando llegas a uno, tienes a sus "vecinos" muy cerca.
+
+    Reduces el coste de búsqueda: No tienes que recorrer 500 números para encontrar el siguiente; a menudo el siguiente estará en la "ventana" del bloque que estás procesando.
+
+El gran peligro (y cómo evitarlo)
+
+El riesgo es que el bloque [1, 5, 8, 26, 32, 78] y el bloque [18, 25, 42, 46, 67, 98] están entrelazados. El 18 debería ir entre el 8 y el 26.
+
+La solución para tu lógica:
+Para que tu idea de los bloques de 6 no explote en movimientos, deberías combinarla con una mínima clasificación por rangos:
+
+    Solo intenta crear esos bloques de 6 con números que pertenezcan al mismo "barrio" (ej. números del 0 al 100).
+
+    Si mezclas un 1 con un 400 en un bloque de 6, cuando intentes ordenar el 400 en la fase final, el 1 te estará "estorbando" en el tope del stack durante miles de operaciones.
+
+Resumen de tu algoritmo "Custom":
+
+    Fase 1 (A -> B): Usas la ventana de 6 para identificar números del mismo rango y los mandas a B creando "rachas" ordenadas de 6 en 6.
+
+    Fase 2 (B -> A): Buscas el máximo de B. Gracias a que creaste bloques ordenados, cuando encuentres el máximo, verás que sus "compañeros" de bloque están justo debajo, 
+listos para ser movidos con un coste casi nulo.
+
+¿Merece la pena?
+
+Sí, por originalidad y eficiencia. Si logras que tu máquina de estados detecte estas "rachas" de 6, bajarás de los 4500 movimientos con facilidad porque estarás haciendo lo que 
+hace el software de alto rendimiento: aprovechar el orden parcial.
+
+¿Quieres que intentemos definir qué "regla de oro" debería tener tu máquina de estados para decidir si un número debe entrar en un bloque de 6 o si es mejor ignorarlo y buscar otro? 
+Sería el corazón de tu algoritmo.
+
+Un último consejo de "arquitecto"
+
+Para llegar a esos 4.500, asegúrate de que tu máquina de estados implemente la Rotación Inversa Doble (rrr). Si en tu ventana de 6 ves que tienes que rotar A para buscar un número 
+y al mismo tiempo tienes que rotar B para preparar el hueco, usa rr o rrr. Esto reduce el coste de esa acción de 2 movimientos a solo 1. Multiplicado por 500 números, 
+son cientos de movimientos de ahorro.
+
+¿Te gustaría que diseñáramos la función de coste que tu Máquina de Estados usaría para decidir si vale la pena rotar A y B a la vez? Sería el toque final para asegurar ese 5/5.
+
+Para mejorar tu lógica y bajar de esa barrera de los 4.500 movimientos, tienes que pasar de una lógica de "reacción" (ver qué hay ahora) a una de "previsión" (preparar lo que viene).
+
+Aquí tienes 3 mejoras críticas para tu algoritmo de Ventana de 6 + Bits + FSM:
+1. El "Pivote Dinámico" en la Ventana de 6
+
+Actualmente, tu lógica mira si el tope de A "encaja" en B. Para mejorarla, añade una regla de sacrificio:
+
+    La lógica: A veces, el número en stack_a->top no es el mejor, pero el que está en stack_a->next es perfecto.
+
+    La mejora: Si mover el segundo número de la ventana te ahorra 5 rotaciones en el futuro, haz un sa o un ra para "saltarte" el primero momentáneamente.
+ No trates los números como una fila rígida,  sino como piezas de Tetris que puedes reordenar antes de lanzar.
+
+2. Sincronización de "Órbitas" (Uso de rr y rrr)
+
+Esta es la mejora que más puntos te va a dar. Tu máquina de estados debe ser capaz de ver las dos ruedas a la vez.
+
+    El problema: A veces rotas A para buscar un número y, 10 pasos después, rotas B para hacer sitio.
+
+    La mejora: Antes de ejecutar un ra, pregunta: "¿El Stack B también necesita rotar?". Si la respuesta es sí, usa rr.
+
+    Por qué funciona: Estás haciendo dos trabajos por el precio de uno. En 500 números, si logras que el 20% de tus rotaciones sean dobles, ahorras más de 400 movimientos del tirón.
+
+3. El "Efecto Muelle" en el Retorno (B -> A)
+
+Cuando devuelvas los bloques de 6 desde B hacia A, no los sueltes de forma plana.
+
+    La mejora: Si el bloque de 6 en B está ordenado [10, 20, 30, 40, 50, 60], cuando lo pases a A, intenta que el "hueco" en A no sea estático.
+
+    Técnica "Push & Swap": Si el número que toca es el 50 pero el que tienes arriba es el 60, lanza el 60, luego el 50, y haz un sa.
+
+    Resultado: Te permite ser mucho más flexible. No necesitas que B esté perfecto; te basta con que esté "casi" ordenado y usas la Stack A como una zona de acabado final.
+
+¿Cómo estructurar estas mejoras en tu Máquina de Estados?
+
+Para no complicar el código, añade una función de "Cálculo de Oportunidad" dentro de tu estado SEARCHING:
+
+    Analiza ventana de A.
+
+    Analiza ventana de B.
+
+    ¿Hay coincidencia directa? -> pb.
+
+    ¿Hay coincidencia con sa? -> sa y pb.
+
+    ¿Hay coincidencia rotando ambos? -> rr o rrr.
+
+Un detalle técnico sobre los Bits (Bucketing)
+
+Para 500 números, no uses bloques de bits fijos (como >> 3). Prueba con un "Margen de Tolerancia".
+
+    En lugar de decir "si los bits son iguales", di: "si la diferencia entre el índice de A y el índice del tope de B es menor a K (donde K es el tamaño de tu ventana)".
+
+    Esto hace que los bloques sean fluidos y no "cortes" artificiales que te obliguen a rotar de más al final de cada chunk.
+
+¿Qué te parece este enfoque? Con estas tres mejoras, tu lógica deja de ser un "ordenador de números" y se convierte en un optimizador de flujos, que es lo que realmente
+ busca el proyecto push_swap. Si te sientes cómodo con esto, ¡tienes el 5/5 prácticamente en el bolsillo!
+
+Solucionadores LIS (Longest Increasing Subsequence)
+
+Esta es probablemente la técnica más elegante y común entre los que sacan puntuaciones de "leyenda" en 42.
+
+    Cómo funcionan: Antes de mover nada, el algoritmo busca la Secuencia Creciente más Larga que ya existe en el Stack A.
+
+    La lógica: Si tienes 500 números y encuentras una secuencia de 50 números que ya están en orden (aunque tengan otros números entre medias), esos 50 números no se mueven jamás. 
+Se quedan como "ancla" en el Stack A.
+
+    El ahorro: Al no mover esos números a B y de vuelta a A, te ahorras unos 100-150 movimientos de push y cientos de rotaciones. El resto de los números se insertan "alrededor" de 
+esta columna vertebral.
+
+Si logras implementar bien el LIS (no mover la secuencia más larga) junto con tu ventana de 6, podrías acercarte a los 4.000 sin necesidad de algoritmos de búsqueda ultra-complejos. 
+¡Ese sería el equilibrio perfecto!
+
+
+
+ Un compañero me ha explicado de manera visual (como lo verias en un visualizer) el algoritmo que el hizo, dice que al pasar los numeros a otro stack, los stacks se quedaban como una "oruga" (ondulado, los valores van subiendo y bajando), y despues mezcla los dos stacks como un mazo de cartas, intercalando, se te ocurre alguna idea con esa descripcion visual de como lo ha hecho?
+
+Esa descripción visual es fascinante porque encaja con un algoritmo de ordenación por mezcla (Merge Sort) pero diseñado específicamente para aprovechar la circularidad de los stacks. Lo que tu compañero llama "oruga" es una señal clara de que está creando oscilaciones de valores (subidas y bajadas controladas) para facilitar la mezcla final.
+
+Aquí tienes la "traducción" técnica de lo que probablemente está haciendo:
+1. La "Oruga": Creación de Monotonías
+
+En lugar de mandar números a ciegas, está creando series crecientes y decrecientes consecutivas.
+
+    Al pasar de A a B, no intenta ordenarlo todo de menor a mayor.
+
+    En su lugar, manda un grupo de números de forma creciente, luego el siguiente de forma decreciente, y así sucesivamente.
+
+    Visto en un visualizador, los valores suben y bajan formando esa silueta ondulada de "oruga".
+
+2. El "Mazo de Cartas": La Mezcla (Interleaving)
+
+Lo que describe como "mezclar como un mazo de cartas" es un Merge Bidireccional.
+
+    Al tener una serie creciente en un stack y otra decreciente en el otro (o en diferentes partes del mismo stack circular), puede compararlas simultáneamente.
+
+    Como si fueran dos mitades de una baraja, va soltando el número que toca de un lado o del otro.
+
+    En push_swap, esto se traduce en: "Miro el tope de A y el tope de B, elijo el menor, hago pa o lo dejo en A, y roto".
+
+3. ¿Cómo encaja esto con tu idea?
+
+Tu idea de los bloques de 6 y los bits puede evolucionar hacia esto perfectamente.
+
+    Imagina que usas tus bits para decidir si el número va a la "joroba" de la oruga (subida) o al "valle" (bajada).
+
+    Al usar la ventana de 6, puedes asegurar que esas subidas y bajadas sean suaves, sin saltos bruscos que rompan la "oruga".
+
+La Lógica Maestra detrás de la "Oruga"
+
+Probablemente, su algoritmo funciona así:
+
+    Divide A en dos mitades (usando la mediana o bits).
+
+    Manda una mitad a B de forma que quede ordenada ascendentemente.
+
+    La otra mitad se queda en A ordenada descendentemente.
+
+    Ahora tiene dos "mazos": A y B.
+
+    El Merging: Compara el tope de A con el tope de B. Elige el que toca según el orden final y los va apilando. Es el momento donde "intercala" las cartas.
+
+¿Por qué visualmente parece una oruga?
+
+Porque al rotar un stack que tiene varias secuencias ordenadas (ej: 1-10, 20-10, 30-40...), el visualizador muestra líneas que suben y bajan. Si lo haces bien, esas líneas son continuas y "suaves".
+Ventajas de este método:
+
+    Muy pocos movimientos de búsqueda: No tienes que "recorrer" el stack buscando el mínimo, porque sabes que el siguiente número está o en el tope de A o en el tope de B.
+
+    Aprovecha el ss, rr y rrr: Al mover ambos "mazos" a la vez para buscar el siguiente número, las rotaciones dobles son constantes.
+
+Mi consejo: Esa técnica es muy potente pero requiere una precisión quirúrgica con los punteros. Si quieres probarla, usa tu máquina de estados para gestionar los dos modos: ESTADO_ORUGA (crear las ondas) y ESTADO_MAZO (intercalarlas).
+
+¿Te gustaría que intentáramos definir cómo sería la comparación de la ventana de 6 para decidir si un número ayuda a formar esa "onda" de la oruga?
+
+Con eso en cuantos pasos quedaria? Y como de grande seria el proyecto?
+
+Esta técnica de la "Oruga" (o mezcla de secuencias bitónicas) es una de las más elegantes que existen en push_swap. Es un algoritmo que no se basa en la "suerte" de encontrar un número cerca, sino en la geometría de los datos.
+
+Aquí tienes el análisis de viabilidad para este enfoque:
+1. ¿En cuántos pasos quedaría? (Eficiencia)
+
+Si se implementa con precisión, este algoritmo es un competidor directo del récord absoluto.
+
+    Para 100 números: Podrías estar entre los 500 y 600 movimientos.
+
+    Para 500 números: Estarías moviéndote en el rango de 3.800 a 4.200 movimientos.
+
+¿Por qué es tan bajo?
+Porque en la fase final (la mezcla del "mazo de cartas"), el coste de decisión es casi O(1). No buscas el número en todo el stack; el número que necesitas siempre está en uno de los dos topes o a un solo movimiento de distancia. El ahorro en rotaciones es masivo.
+2. ¿Cómo de grande sería el proyecto? (Complejidad)
+
+Aquí es donde está la "trampa". Es un proyecto conceptual y técnicamente más difícil que el de Chunks o el Turk.
+El crecimiento del código:
+
+    Lógica de Partición: Necesitas una función muy sólida para dividir el stack original en estas "ondas". No te sirve con mandar números al azar; tienes que calcular si mandas el número al tope o al fondo del stack B para mantener la forma de oruga.
+
+    Gestión de "Runs": Tu código debe llevar la cuenta de dónde empieza y termina cada onda. Esto implica más variables en tus estructuras o una lógica de punteros muy fina.
+
+    El "Merge" final: Programar la mezcla de los dos stacks requiere manejar perfectamente los casos donde un stack se acaba antes que el otro, y asegurar que la dirección de rotación sea siempre la óptima.
+
+3. El reto de la Implementación: ¿Vale la pena?
+
+Pros:
+
+    Visualmente impresionante: En el visualizador de 42, tu algoritmo se verá como una coreografía perfecta, lo cual encanta a los evaluadores.
+
+    Aprendizaje real: Estarás implementando una variante del Bitonic Sort o Merge Sort, lo cual es conocimiento de algoritmia de nivel avanzado.
+
+Contras:
+
+    Tiempo de desarrollo: Te llevará aproximadamente el doble de tiempo que el algoritmo de Chunks. Hay muchos "edge cases" (casos borde) donde la oruga se puede romper y el stack se desordena por completo.
+
+    Depuración: Es más difícil encontrar por qué falla. Si un número termina en la onda equivocada, el error no aparecerá hasta 200 pasos después, en la fase de mezcla.
+
+Mi veredicto para tu situación
+
+Si tienes poco tiempo, quédate con la Máquina de Estados + Chunks + Ventana de 6. Es una apuesta segura, fácil de explicar y te garantiza el 100/100.
+
+Si te apasiona la algoritmia y quieres hacer "el proyecto del que todos hablen" en el campus, intenta la Oruga.
+
+    Idea intermedia: Podrías hacer que tu estado PUSHING use tu ventana de 6 para crear "mini-orugas" (bloques de 6 que suben y bajan). Es decir, aplicas la lógica de tu compañero pero solo a pequeña escala. Así tendrías la eficiencia de la mezcla sin la complejidad de gestionar un stack de 500 números como una sola onda gigante.
+
+¿Te gustaría que intentáramos diseñar el pseudocódigo de cómo tu ventana de 6 decidiría si un número "sube" o "baja" en la oruga? Sería el primer paso para ver si te ves capaz de programarlo.
