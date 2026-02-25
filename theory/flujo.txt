@@ -1,3 +1,21 @@
+Tu Pipeline Optimizado (Visualmente)
+
+    Entrada: argv → Unir/Limpiar → ft_split.
+
+    Conversión: char ** → int *array (validando INT_MAX/MIN).
+
+    Preparación: int *copy → Merge Sort → Check Duplicados.
+
+    Indexación: Comparar array[i] con copy para sacar el rango.
+
+    Estructura: Llenar Stack A con los índices.
+
+    Limpieza: free(array), free(copy), free(split_result).
+
+    Magia: Ejecutar el algoritmo (Radix, Turco, o Chunks).
+
+    Final: free_stack(A).
+
 Fase 1: El Esqueleto (La infraestructura)
 
 No pienses en ordenar todavía. Construye la caja de herramientas.
