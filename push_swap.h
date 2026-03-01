@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 17:30:29 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/02/25 00:40:53 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/01 01:49:28 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,17 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+typedef enum e_state
+{
+	START,
+	LOADING,
+	SORT_SMALL,
+	SORT_FIVE,
+	SORT_BIG,
+	DONE,
+	ERROR
+}		t_state;
+
 typedef struct s_stack
 {
 	int				number;
@@ -24,19 +35,15 @@ typedef struct s_stack
 	struct s_stack	*prev;
 }		t_stack;
 
-/*
-typedef enum e_state
-{
-	START,
-	PARSING,
-	LOADING,
-	SORT_SMALL,
-	SORT_FIVE,
-	SORT_BIG,
-	DONE,
-	ERROR
-}	t_state;
-*/
-int check_argv_error(char **argv);
+int	check_argv_error(char **argv);
+int	init_stack(t_stack **a, char **args);
+int	count_numbers(char **args);
+int	check_duplicates(int *sorted_nums, int n);
+int	*numbers_array(char **args, int n);
+int	ft_atoi(const char *str);
+
+int	binary_search_index(int *sorted_arr, int n, int value);
+
+int	terminate_program(t_state state, t_stack *a);
 
 #endif

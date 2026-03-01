@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   start_argv_errors.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:25:05 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/02/24 21:36:34 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/01 01:43:12 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	check_valid_format(char **argv)
 					return (0);
 			}
 			while (*ptr && *ptr != ' ')
-					ptr++;
+				ptr++;
 		}
 		argv++;
 	}
@@ -92,8 +92,7 @@ static int	check_valid_chars(char **argv)
 	return (1);
 }
 
-
-int check_argv_error(char **argv)
+int	check_argv_error(char **argv)
 {
 	if (!check_valid_chars(argv) || !check_valid_format(argv))
 	{
