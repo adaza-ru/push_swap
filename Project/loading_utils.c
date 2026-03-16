@@ -6,11 +6,27 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/28 21:03:16 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/01 01:46:00 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/16 01:55:24 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	is_sorted(t_stack *a)
+{
+	t_stack	*temp;
+
+	if (!a)
+		return (1);
+	temp = a;
+	while (temp->next != a)
+	{
+		if (temp->number > temp->next->number)
+			return (0);
+		temp = temp->next;
+	}
+	return (1);
+}
 
 int	ft_atoi(const char *str)
 {

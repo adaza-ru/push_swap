@@ -6,21 +6,22 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 17:42:48 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/01 01:42:00 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/16 02:12:05 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	handle_loading(t_state *state, t_stack **a, char **args)
+static int	handle_loading(t_state *state, t_stack **a, char **args)
 {
-	int	numbers_count;
+	int	n;
 
-	numbers_count = init_stack(a, args);
-	if (!numbers_count)
+	n = init_stack(a, args);
+	if (n == 0)
 		*state = ERROR;
 	else
-		*state = decide_sort_state(*a, numbers_count);
+		*state = decide_sort_state(*a, n);
+	return (n);
 }
 
 static void	handle_start(t_state *state, int argc, char **args)
@@ -37,18 +38,20 @@ int	main(int argc, char **argv)
 {
 	t_state	state;
 	t_stack	*a;
+	int		n;
 
 	state = START;
 	a = NULL;
+	n = 0;
 	while (state != DONE && state != ERROR)
 	{
 		if (state == START)
-			handle_start(&state, argc, argv + 1);
+			handle_start(&state, argc);
 		else if (state == LOADING)
-			handle_loading(&state, &a, argv + 1);
+			n = handle_loading(&state, &a, argv + 1);
 		else if (state >= SORT_SMALL && state <= SORT_BIG)
 		{
-			execute_sorting(a, state);
+			execute_sorting(&a, state, n);
 			state = DONE;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:09:02 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/02 00:24:49 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/16 01:54:56 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_stack	*ft_stack_new(int val, int *idx, int n)
 	if (!node)
 		return (NULL);
 	node->number = val;
-	node->index = get_index(idx, n, val);
+	node->index = binary_search_index(idx, n, val);
 	node->next = node;
 	node->prev = node;
 	return (node);
@@ -79,4 +79,20 @@ int	init_stack(t_stack **a, char **args)
 		if (!create_stack(a, args, n))
 			return (0);
 	return (n);
+}
+
+t_state	decide_sort_state(t_stack *a, int n)
+{
+	if (is_sorted(a))
+		return (DONE);
+	if (n == 2)
+	{
+		sa(&a);
+		return (DONE);
+	}
+	if (n == 3)
+		return (SORT_SMALL);
+	if (n <= 5)
+		return (SORT_FIVE);
+	return (SORT_BIG);
 }
