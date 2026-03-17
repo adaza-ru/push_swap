@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 17:42:48 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/17 17:55:33 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:49:10 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int argc, char **argv)
 	t_state	state;
 	t_stack	*a;
 	int		n;
+	int		rtn;
 
 	state = START;
 	a = NULL;
@@ -55,5 +56,6 @@ int	main(int argc, char **argv)
 			state = DONE;
 		}
 	}
-	return (terminate_program(state, a));
+	rtn = terminate_program(state, a);
+	return (rtn);
 }

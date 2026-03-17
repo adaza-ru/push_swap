@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:18:53 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/17 17:15:25 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:43:17 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	terminate_program(t_state state, t_stack *a)
 	if (state == ERROR)
 	{
 		write(2, "Error\n", 6);
-		return (0);
+		return (1);
 	}
 	else
-		return (1);
+		return (0);
 }
