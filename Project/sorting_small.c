@@ -6,13 +6,13 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 02:17:18 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/16 02:17:44 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:22:48 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	sort_small(t_stack *a)
+void	sort_small(t_stack **a)
 {
 	int	first;
 	int	second;

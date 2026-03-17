@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:25:05 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/01 01:43:12 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:40:45 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	check_valid_chars(char **argv)
 			return (0);
 		while (argv[i][j])
 		{
-			if ((argv[i][j] < '0' || argv[i][j] > '9') && argv[i][j] != '-'
+			if (!(argv[i][j] >= '0' && argv[i][j] <= '9') && argv[i][j] != '-'
 			&& argv[i][j] != '+' && argv[i][j] != ' ')
 				return (0);
 			j++;

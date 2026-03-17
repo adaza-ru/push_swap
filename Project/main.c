@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 17:42:48 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/16 02:12:05 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:55:33 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int argc, char **argv)
 	while (state != DONE && state != ERROR)
 	{
 		if (state == START)
-			handle_start(&state, argc);
+			handle_start(&state, argc, argv + 1);
 		else if (state == LOADING)
 			n = handle_loading(&state, &a, argv + 1);
 		else if (state >= SORT_SMALL && state <= SORT_BIG)

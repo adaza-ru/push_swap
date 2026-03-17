@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 01:59:27 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/16 02:17:51 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:19:49 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ void	execute_sorting(t_stack **a, t_state state, int n)
 	else if (state == SORT_FIVE)
 		sort_five(a, &b, n);
 	else if (state == SORT_BIG)
-		sort_big(a, &b, n);
+		radix_sort(a, &b, n);
 }

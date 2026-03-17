@@ -6,9 +6,11 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:18:53 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/01 01:42:22 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:15:25 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "push_swap.h"
 
 static void	free_stack(t_stack **stack)
 {

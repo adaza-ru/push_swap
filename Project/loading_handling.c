@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loading.c                                          :+:      :+:    :+:   */
+/*   loading_handling.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:09:02 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/16 01:54:56 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:16:46 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	init_stack(t_stack **a, char **args)
 	return (n);
 }
 
-t_state	decide_sort_state(t_stack *a, int n)
+int	decide_sort_state(t_stack *a, int n)
 {
 	if (is_sorted(a))
 		return (DONE);
