@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 17:30:29 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/17 17:21:47 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/17 19:24:48 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ void	rrr(t_stack **a, t_stack **b);
 void	execute_sorting(t_stack **a, t_state state, int n);
 void	sort_small(t_stack **a);
 void	sort_five(t_stack **a, t_stack **b, int n);
-//void	sort_five(t_stack **a, t_stack **b, int n);
-void	radix_sort(t_stack **a, t_stack **b, int n);
+void	big_sort(t_stack **a, t_stack **b, int n);
 int		terminate_program(t_state state, t_stack *a);
 
 #endif
