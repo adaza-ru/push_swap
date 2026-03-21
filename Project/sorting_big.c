@@ -6,27 +6,83 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 02:27:25 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/17 19:54:00 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/21 21:11:18 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+static void	push_to_a(t_stack **a, t_stack **b)
+{
+	int	max_pos;
+	int	size;
+
+	while (*b)
+	{
+		size = get_stack_size(*b);
+		max_pos = get_max_pos(*b);
+		if (max_pos <= size / 2)
+		{
+			while (max_pos-- > 0)
+				rb(b);
+		}
+		else
+		{
+			while (max_pos++ < size)
+				rrb(b);
+		}
+		pa(a, b);
+	}
+}
+
+static void	push_to_b(t_stack **a, t_stack **b, int chunk_size)
+{
+	int	i;
+
+	i = 0;
+	while (*a)
+	{
+		if ((*a)->index <= i)
+		{
+			pb(b, a);
+			rb(b);
+			i++;
+		}
+		else if ((*a)->index <= i + chunk_size)
+		{
+			pb(b, a);
+			i++;
+		}
+		else
+		{
+			ra(a);
+		}
+	}
+}
+
 static int	calculate_chunk(int n)
 {
-	float	size;
-	float	sqr_nr;
-	float	precision;
+	double	sqr_nr;
+	double	next;
+	int		iter;
 
 	if (n <= 0)
 		return (0);
-	sqr_nr = (float)n;
-	precision = 0.00001f;
-	while ((sqr_nr * sqr_nr - (float)n) > precision
-		|| ((float)n - sqr_nr * sqr_nr) > precision)
-		sqr_nr = (sqr_nr + ((float)n / sqr_nr)) / 2;
-	size = sqr_nr * 1.45f;
-	return ((int)(size + 0.5f));
+	sqr_nr = (double)n;
+	iter = 60;
+	while (iter--)
+	{
+		next = 0.5 * (sqr_nr + ((double)n / sqr_nr));
+		if (next > sqr_nr && (next - sqr_nr) < 1e-12)
+			break ;
+		if (sqr_nr > next && (sqr_nr - next) < 1e-12)
+			break ;
+		sqr_nr = next;
+	}
+	n = (int)(sqr_nr * 1.45 + 0.5);
+	if (n < 1)
+		return (1);
+	return (n);
 }
 
 void	big_sort(t_stack **a, t_stack **b, int n)
@@ -34,41 +90,6 @@ void	big_sort(t_stack **a, t_stack **b, int n)
 	int	chunk_size;
 
 	chunk_size = calculate_chunk(n);
+	push_to_b(a, b, chunk_size);
+	push_to_a(a, b);
 }
-
-/*
-static int	get_max_bits(int n)
-{
-	int	max_bits;
-
-	max_bits = 0;
-	while (((n - 1) >> max_bits) != 0)
-		max_bits++;
-	return (max_bits);
-}
-
-void	big_sort(t_stack **a, t_stack **b, int n)
-{
-	int	i;
-	int	j;
-	int	max_bits;
-
-	i = 0;
-	max_bits = get_max_bits(n);
-	while (i < max_bits)
-	{
-		j = 0;
-		while (j < n)
-		{
-			if ((((*a)->index >> i) & 1) == 0)
-				pb(b, a);
-			else
-				ra(a);
-			j++;
-		}
-		while (*b)
-			pa(a, b);
-		i++;
-	}
-}
-*/

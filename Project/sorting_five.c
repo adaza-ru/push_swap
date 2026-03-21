@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 02:19:16 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/17 17:23:32 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/21 20:22:20 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 void	sort_five(t_stack **a, t_stack **b, int n)
 {
 	int	pushed;
-	int	remaining;
 
 	pushed = 0;
-	remaining = n;
 	while (pushed < n - 3)
 	{
 		if ((*a)->index < (n - 3))
