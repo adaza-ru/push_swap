@@ -6,7 +6,7 @@
 #    By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/17 15:37:46 by adaza-ru          #+#    #+#              #
-#    Updated: 2026/03/22 22:58:23 by adaza-ru         ###   ########.fr        #
+#    Updated: 2026/03/22 23:55:57 by adaza-ru         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,24 +43,24 @@ mandatory: $(NAME)
 bonus: $(BONUS_NAME)
 
 $(NAME): $(OBJS)
-    $(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 $(BONUS_NAME): $(OBJS_BONUS)
-    $(CC) $(CFLAGS) $(OBJS_BONUS) -o $(BONUS_NAME)
+	$(CC) $(CFLAGS) $(OBJS_BONUS) -o $(BONUS_NAME)
 
 $(OBJ_DIR)/%.o: %.c
-    @mkdir -p $(dir $@)
-    $(CC) $(CFLAGS) -c $< -o $@
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR_BONUS)/%.o: %.c
-    @mkdir -p $(dir $@)
-    $(CC) $(CFLAGS) -c $< -o $@
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-    $(RM) obj
+	$(RM) obj
 
 fclean: clean
-    $(RM) $(NAME) $(BONUS_NAME)
+	$(RM) $(NAME) $(BONUS_NAME)
 
 re: fclean all
 

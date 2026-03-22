@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/22 14:22:20 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/22 18:02:52 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/23 00:07:15 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,16 @@ static void	push(t_stack **dst, t_stack **src, char *op)
 		return ;
 	tmp = pop_node(src);
 	push_node(dst, tmp);
-	write(1, op, 3);
+	if (op)
+		write(1, op, 3);
 }
 
 void	pb(t_stack **b, t_stack **a)
 {
-	push(b, a, "pb\n");
+	push(b, a, NULL);
 }
 
 void	pa(t_stack **a, t_stack **b)
 {
-	push(a, b, "pa\n");
+	push(a, b, NULL);
 }

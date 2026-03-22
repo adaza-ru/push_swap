@@ -60,7 +60,7 @@ sa
 ### Stress Test
 ```bash
 ARG=$(shuf -e $(seq 0 499) | awk -v min=-2147483648 -v max=2147483647 'BEGIN{srand();}{print int(min + rand() * (max - min + 1))}' | tr '\n' ' ')
-valgrind --leak-check=full ./push_swap $ARG 2> leaks.txt | tee >(wc -l) | ./checker_linux $ARG; grep -E "ERROR SUMMARY|definitely lost|indirectly lost" leaks.txt
+valgrind --leak-check=full ./push_swap $ARG 2> leaks.txt | tee >(wc -l) | ./checker $ARG; grep -E "ERROR SUMMARY|definitely lost|indirectly lost" leaks.txt
 ```
 
 ## Algorithm Overview

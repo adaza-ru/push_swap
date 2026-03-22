@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 01:59:27 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/22 22:47:53 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/23 00:01:01 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	execute_sorting(t_stack **a, t_state *state, t_stack **b)
 			free(line);
 		}
 	}
-	if (is_sorted(a) && !b && *state == DONE)
+	if (is_sorted(*a) && !*b && *state == DONE)
 		write(1, "OK\n", 3);
 	else if (*state == DONE)
 		write(1, "KO\n", 3);

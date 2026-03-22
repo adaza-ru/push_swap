@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:09:02 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/22 18:02:27 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/22 23:58:45 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,4 @@ int	init_stack(t_stack **a, char **args)
 		if (!create_stack(a, args, n))
 			return (0);
 	return (n);
-}
-
-int	decide_sort_state(t_stack *a, int n)
-{
-	if (is_sorted(a))
-		return (DONE);
-	if (n == 2)
-	{
-		sa(&a);
-		return (DONE);
-	}
-	if (n == 3)
-		return (SORT_SMALL);
-	if (n <= 5)
-		return (SORT_FIVE);
-	return (SORT_BIG);
 }

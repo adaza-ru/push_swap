@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/22 14:22:28 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/22 18:02:55 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/23 00:06:09 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,14 @@ void	rr(t_stack **a, t_stack **b)
 {
 	rotate(a, NULL);
 	rotate(b, NULL);
-	write(1, "rr\n", 3);
 }
 
 void	rb(t_stack **b)
 {
-	rotate(b, "rb\n");
+	rotate(b, NULL);
 }
 
 void	ra(t_stack **a)
 {
-	rotate(a, "ra\n");
+	rotate(a, NULL);
 }
