@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 17:30:29 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/22 14:28:36 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/23 00:14:26 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int		check_duplicates(int *sorted_nums, int n);
 int		*numbers_array(char **args, int n);
 int		ft_atoi(const char *str);
 int		*indexes_array(int *nums, int n);
-int		check_duplicates(int *sorted_nums, int n);
 int		binary_search_index(int *sorted_arr, int n, int value);
 int		decide_sort_state(t_stack *a, int n);
 int		is_sorted(t_stack *a);
