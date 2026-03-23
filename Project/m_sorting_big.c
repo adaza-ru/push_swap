@@ -6,7 +6,7 @@
 /*   By: adaza-ru <adaza-ru@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 02:27:25 by adaza-ru          #+#    #+#             */
-/*   Updated: 2026/03/22 14:29:50 by adaza-ru         ###   ########.fr       */
+/*   Updated: 2026/03/23 23:36:03 by adaza-ru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,22 @@ static void	push_to_a(t_stack **a, t_stack **b, int size)
 	}
 }
 
-static void	push_to_b(t_stack **a, t_stack **b, int chunk_size)
+static void	push_to_b(t_stack **a, t_stack **b, int chunk_size, int n)
 {
 	int	i;
+	int	limit;
 
+	limit = n - 3;
 	i = 0;
-	while (*a)
+	while (i < limit && *a)
 	{
-		if ((*a)->index <= i)
+		if ((*a)->index <= i && ((*a)->index < limit))
 		{
 			pb(b, a);
 			rb(b);
 			i++;
 		}
-		else if ((*a)->index <= i + chunk_size)
+		else if ((*a)->index <= i + chunk_size && ((*a)->index < limit))
 		{
 			pb(b, a);
 			i++;
@@ -119,6 +121,7 @@ void	big_sort(t_stack **a, t_stack **b, int n)
 	int	chunk_size;
 
 	chunk_size = calculate_chunk(n);
-	push_to_b(a, b, chunk_size);
-	push_to_a(a, b, n);
+	push_to_b(a, b, chunk_size, n);
+	sort_small(a);
+	push_to_a(a, b, n - 3);
 }
