@@ -1,0 +1,4 @@
+*.o
+obj/
+/push_swap
+/checker
