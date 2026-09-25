@@ -1,5 +1,3 @@
-*This project has been created as part of the 42 curriculum by adaza-ru.*
-
 <div align="center">
 
 # Push Swap — Sorting Two Stacks in the Fewest Moves
@@ -9,6 +7,8 @@
 ![C](https://img.shields.io/badge/language-C-00599C?logo=c&logoColor=white)
 ![Make](https://img.shields.io/badge/build-Make-red)
 ![Algorithms](https://img.shields.io/badge/focus-algorithms-orange)
+
+*This project has been created as part of the 42 curriculum by adaza-ru.*
  
 </div>
  
